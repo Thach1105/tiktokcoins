@@ -1,7 +1,7 @@
 const MOCK_DATA = [
-  { id: '1', tiktok_id: 'memorymusic', coin_amount: 30, price: 0.29, payment_method: 'VISA', status: 'completed', created_at: new Date(Date.now() - 86400000).toISOString() },
-  { id: '2', tiktok_id: 'memorymusic', coin_amount: 700, price: 6.99, payment_method: 'VISA', status: 'completed', created_at: new Date(Date.now() - 7200000).toISOString() },
-  { id: '3', tiktok_id: 'mem0ry_fan', coin_amount: 350, price: 3.49, payment_method: 'Mastercard', status: 'completed', created_at: new Date(Date.now() - 54000000).toISOString() }
+  { id: '1', tiktok_id: 'memorymusic', coin_amount: 30, price: 0.29, payment_method: 'VISA', status: 'completed', created_at: new Date(Date.now() - 86400000).toISOString(), avatar: 'https://i.pravatar.cc/150?u=1' },
+  { id: '2', tiktok_id: 'memorymusic', coin_amount: 700, price: 6.99, payment_method: 'VISA', status: 'completed', created_at: new Date(Date.now() - 7200000).toISOString(), avatar: 'https://i.pravatar.cc/150?u=2' },
+  { id: '3', tiktok_id: 'mem0ry_fan', coin_amount: 350, price: 3.49, payment_method: 'Mastercard', status: 'completed', created_at: new Date(Date.now() - 54000000).toISOString(), avatar: 'https://i.pravatar.cc/150?u=3' }
 ]
 
 const getLocalStorageData = (table) => {

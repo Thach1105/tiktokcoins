@@ -66,7 +66,7 @@ function App() {
       setFoundUser({
         name: tiktokId.split('@').pop(),
         id: tiktokId,
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${tiktokId}`,
+        avatar: `https://i.pravatar.cc/150?u=${tiktokId}`,
         balance: Math.floor(Math.random() * 5000)
       })
     }, 3500)
