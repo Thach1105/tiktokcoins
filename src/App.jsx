@@ -42,7 +42,7 @@ function App() {
         handleSearch()
       }
     }, 800) // Start search after 800ms of no typing
-    
+
     return () => clearTimeout(timer)
   }, [tiktokId])
 
@@ -56,10 +56,10 @@ function App() {
 
   const handleSearch = () => {
     if (!tiktokId) return
-    
+
     setIsSearching(true)
     setFoundUser(null)
-    
+
     // Simulate 3-4 second loading as requested
     setTimeout(() => {
       setIsSearching(false)
@@ -108,10 +108,10 @@ function App() {
 
   return (
     <div className="app">
-     <header className="header">
+      <header className="header">
         <div className="logo">
           <img src={LOGO_IMAGE} alt="TikTok" className="logo-icon" />
-          <span>TikTok Official Shop</span>
+          <span>TikTok</span>
         </div>
         <div className="search-container">
           <input
@@ -137,7 +137,7 @@ function App() {
                 e.preventDefault()
                 setShowHistory(true)
               }}
-              style={{background: 'none', border: 'none', cursor: 'pointer'}}
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             >
               View transaction history
             </button>
@@ -172,8 +172,8 @@ function App() {
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               />
               {isSearching && <div className="input-spinner"></div>}
-              <button 
-                className="search-btn" 
+              <button
+                className="search-btn"
                 onClick={handleSearch}
                 disabled={isSearching || !tiktokId}
               >
@@ -182,7 +182,7 @@ function App() {
             </div>
 
             {foundUser && (
-              <div 
+              <div
                 className="search-result"
                 onClick={() => handleSelectUser(foundUser)}
                 style={{ cursor: 'pointer' }}
@@ -331,7 +331,7 @@ function App() {
 
       {showSuccess && lastTransaction && (
         <div className="modal-overlay" onClick={() => setShowSuccess(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{maxWidth: '400px'}}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
             <div className="success-modal">
               <div className="success-icon">✓</div>
               <h2 className="success-title">Payment Successful!</h2>
