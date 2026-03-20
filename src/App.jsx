@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from './supabase'
 import TransactionHistory from './TransactionHistory'
 import PaymentModal from './PaymentModal'
@@ -19,6 +19,14 @@ const LOGO_IMAGE = 'https://icon2.cleanpng.com/20200922/xqh/transparent-social-m
 
 function App() {
   const [tiktokId, setTiktokId] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
+  const [foundUser, setFoundUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState({
+    name: 'memorymusic',
+    id: 'memorymusic',
+    balance: 2403,
+    avatar: null
+  })
   const [selectedPackage, setSelectedPackage] = useState(null)
   const [showHistory, setShowHistory] = useState(false)
   const [showPayment, setShowPayment] = useState(false)
@@ -27,12 +35,46 @@ function App() {
   const [customCoins, setCustomCoins] = useState('')
   const [customPrice, setCustomPrice] = useState('')
 
+  // Debounced search logic as requested: "Khi tôi nhập tên người dùng sẽ load 1 lúc"
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (tiktokId && tiktokId.length > 2 && !foundUser && !isSearching) {
+        handleSearch()
+      }
+    }, 800) // Start search after 800ms of no typing
+    
+    return () => clearTimeout(timer)
+  }, [tiktokId])
+
   const handleRecharge = () => {
     if (!tiktokId || !selectedPackage) {
       alert('Please enter TikTok ID and select a coin package')
       return
     }
     setShowPayment(true)
+  }
+
+  const handleSearch = () => {
+    if (!tiktokId) return
+    
+    setIsSearching(true)
+    setFoundUser(null)
+    
+    // Simulate 3-4 second loading as requested
+    setTimeout(() => {
+      setIsSearching(false)
+      setFoundUser({
+        name: tiktokId.split('@').pop(),
+        id: tiktokId,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${tiktokId}`,
+        balance: Math.floor(Math.random() * 5000)
+      })
+    }, 3500)
+  }
+
+  const handleSelectUser = (user) => {
+    setCurrentUser(user)
+    setFoundUser(null)
   }
 
   const handlePaymentSuccess = async () => {
@@ -102,26 +144,60 @@ function App() {
           </div>
 
           <div className="user-info">
-            <div className="user-avatar">M
+            <div className="user-avatar">
+              {currentUser.avatar ? <img src={currentUser.avatar} alt="avatar" /> : currentUser.name.charAt(0).toUpperCase()}
             </div>
             <div className="user-details">
-              <div className="username">memorymusic...</div>
+              <div className="username">{currentUser.name}</div>
               <div className="user-balance">
                 <CoinIcon size="20px" />
-                <span>2403</span>
+                <span>{currentUser.balance.toLocaleString()}</span>
               </div>
             </div>
           </div>
 
           <div className="input-section">
             <label className="input-label">TikTok ID to Recharge</label>
-            <input
-              type="text"
-              className="tiktok-id-input"
-              placeholder="Enter your TikTok ID"
-              value={tiktokId}
-              onChange={(e) => setTiktokId(e.target.value)}
-            />
+            <div className="search-container-input">
+              <input
+                type="text"
+                className="tiktok-id-input"
+                placeholder="Enter your TikTok ID"
+                style={{ paddingRight: isSearching ? '40px' : '12px' }}
+                value={tiktokId}
+                onChange={(e) => {
+                  setTiktokId(e.target.value)
+                  setFoundUser(null) // Reset result when typing
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              {isSearching && <div className="input-spinner"></div>}
+              <button 
+                className="search-btn" 
+                onClick={handleSearch}
+                disabled={isSearching || !tiktokId}
+              >
+                Search
+              </button>
+            </div>
+
+            {foundUser && (
+              <div 
+                className="search-result"
+                onClick={() => handleSelectUser(foundUser)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="result-user">
+                  <div className="result-avatar">
+                    <img src={foundUser.avatar} alt="found avatar" />
+                  </div>
+                  <div className="result-info">
+                    <div className="result-name">{foundUser.name}</div>
+                    <div className="result-id">@{foundUser.id}</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="recharge-notice">
